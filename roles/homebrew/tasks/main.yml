@@ -1,0 +1,70 @@
+- name: Install homebrew
+  include_role:
+    name: geerlingguy.mac.homebrew
+
+- name: Make sure homebrew bin is in path
+  ansible.builtin.lineinfile:
+    path: /etc/paths
+    state: present
+    line: '/opt/homebrew/bin'
+  become: true
+  become_user: root
+  
+- name: Get a list of installed packages from brew
+  command: /usr/local/bin/brew list --casks
+  register: brew_casks
+  changed_when: false      
+
+- name: Install core packages via brew casks
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+    update_homebrew: yes
+  ignore_errors: yes
+  when: "'{{ item }}' not in brew_casks.stdout"
+  with_items:
+    - google-drive
+    - docker
+    - google-chrome
+    - google-cloud-sdk
+    - iterm2
+    - slack
+    - sublime-text
+    - telegram
+    - visual-studio-code
+    - vlc
+    - zoom
+    - bitwarden
+    - virtualbox
+    - clickup
+    - notion
+    - google-cloud-sdk
+    - lens
+    - stats
+
+- name: "Install homebrew packages"
+  community.general.homebrew:
+    name: "{{ item }}"
+  ignore_errors: yes
+  when: "'{{ item }}' not in brew_casks.stdout"
+  with_items:
+    - aws-iam-authenticator
+    - awscli
+    - coreutils
+    - curl
+    - gpg
+    - htop
+    - kubectx
+    - kubernetes-cli
+    - kubernetes-helm
+    - libtool
+    - libxslt
+    - libyaml
+    - openssl
+    - tmux
+    - unixodbc
+    - unzip
+    - vim
+    - xz
+    - zsh
+
+ 

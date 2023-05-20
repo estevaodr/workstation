@@ -1,0 +1,26 @@
+- name: Install Oh My ZSH
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  args:
+    creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"
+
+- name: Set ZSH as the default shell
+  shell: chsh -s $(which zsh) {{ lookup('env', 'USER') }}
+  become: True
+
+- name: Fix permissions for zsh (if needed)
+  file:
+    name: "{{ item }}"
+    mode: g-w,o-w
+  loop:
+    - /usr/local/share/zsh/site-functions
+    - /usr/local/share/zsh
+    
+- name: Chnage ~/.zshrc
+  replace:
+    dest: ~/.zshrc
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+    mode: u=rw,g=r,o=r
+  loop:
+    - regexp: '^plugins=.*'
+      replace: plugins=(colored-man-pages dirhistory docker git history vagrant-prompt kubectl)
