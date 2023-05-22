@@ -10,10 +10,15 @@
   become: true
   become_user: root
   
-- name: Get a list of installed packages from brew
+- name: Get a list of installed packages from brew cask
   command: /usr/local/bin/brew list --casks
   register: brew_casks
-  changed_when: false      
+  changed_when: false
+
+- name: Get a list of installed packages from brew formula
+  command: /usr/local/bin/brew list --formula
+  register: brew_formula
+  changed_when: false         
 
 - name: Install core packages via brew casks
   community.general.homebrew_cask:
@@ -40,12 +45,14 @@
     - google-cloud-sdk
     - lens
     - stats
+    - docker
 
-- name: "Install homebrew packages"
+
+- name: "Install formula packages via brew"
   community.general.homebrew:
     name: "{{ item }}"
   ignore_errors: yes
-  when: "'{{ item }}' not in brew_casks.stdout"
+  when: "'{{ item }}' not in brew_formula.stdout"
   with_items:
     - aws-iam-authenticator
     - awscli
@@ -55,7 +62,6 @@
     - htop
     - kubectx
     - kubernetes-cli
-    - kubernetes-helm
     - libtool
     - libxslt
     - libyaml
@@ -66,5 +72,24 @@
     - vim
     - xz
     - zsh
+    - k9s
+    - stern
+    - thefuck
+    - jq
+    - yq
+    - helm
+    - mas
 
+# - name: "Install from Mac app store"
+#   shell: mas install {{ item }}
+#   with_items:
+#     #- 497799835 # xcode
+#     - 472790630 # olive tree bible
+
+
+- name: Install a list of apps from mac store
+  community.general.mas:
+    id:
+       - 472790630 # olive tree bible
+    state: present
  

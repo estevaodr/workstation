@@ -2,8 +2,8 @@
   # become: true
   gather_facts: yes
   roles:
-    - role: homebrew
-      tags: ['homebrew']
+    - role: packages
+      tags: ['packages']
     - role: zsh
       tags: ['zsh']
     - role: asdf
