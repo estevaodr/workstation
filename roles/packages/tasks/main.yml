@@ -46,6 +46,7 @@
     - lens
     - stats
     - docker
+    - spotify
 
 
 - name: "Install formula packages via brew"
@@ -79,6 +80,7 @@
     - yq
     - helm
     - mas
+    - pre-commit
 
 # - name: "Install from Mac app store"
 #   shell: mas install {{ item }}
