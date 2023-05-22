@@ -4,10 +4,10 @@
   roles:
     - role: packages
       tags: ['packages']
-    - role: zsh
-      tags: ['zsh']
     - role: asdf
       tags: ['asdf']
+    - role: zsh
+      tags: ['zsh']
 
 
 
