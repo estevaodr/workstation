@@ -91,5 +91,15 @@
   community.general.mas:
     id:
        - 472790630 # olive tree bible
+       - 497799835 # xcode
+       - 408981434 # imovie
     state: present
+
+
+- name: Upgrade all installed Mac App Store apps
+  community.general.mas:
+    upgrade_all: true
+
+
+
  
