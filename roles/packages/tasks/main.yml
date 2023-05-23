@@ -47,6 +47,7 @@
     - stats
     - docker
     - spotify
+    - whatsapp
 
 
 - name: "Install formula packages via brew"
