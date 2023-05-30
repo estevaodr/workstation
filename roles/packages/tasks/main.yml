@@ -48,6 +48,8 @@
     - docker
     - spotify
     - whatsapp
+    - microsoft-teams
+    - microsoft-office
 
 
 - name: "Install formula packages via brew"
