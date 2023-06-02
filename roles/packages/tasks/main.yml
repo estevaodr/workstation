@@ -84,13 +84,7 @@
     - helm
     - mas
     - pre-commit
-
-# - name: "Install from Mac app store"
-#   shell: mas install {{ item }}
-#   with_items:
-#     #- 497799835 # xcode
-#     - 472790630 # olive tree bible
-
+    - languagetool
 
 - name: Install a list of apps from mac store
   community.general.mas:
