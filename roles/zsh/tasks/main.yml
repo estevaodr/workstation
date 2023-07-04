@@ -66,4 +66,7 @@
       # export ASDF
       . $HOME/.asdf/asdf.sh
       . $HOME/.asdf/completions/asdf.bash
+      . $HOME/.asdf/plugins/golang/set-env.zsh
+
+      export ASDF_GOLANG_MOD_VERSION_ENABLED="true"
       

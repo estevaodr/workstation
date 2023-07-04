@@ -50,6 +50,8 @@
     - whatsapp
     - microsoft-teams
     - microsoft-office
+    - balenaetcher
+    - audacity
 
 
 - name: "Install formula packages via brew"
