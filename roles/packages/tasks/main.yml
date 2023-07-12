@@ -52,6 +52,11 @@
     - microsoft-office
     - balenaetcher
     - audacity
+    - soundflower
+    # https://github.com/ExistentialAudio/BlackHole 
+    # https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device
+    - blackhole-2ch
+    - evernote
 
 
 - name: "Install formula packages via brew"
@@ -87,6 +92,7 @@
     - mas
     - pre-commit
     - languagetool
+
 
 - name: Install a list of apps from mac store
   community.general.mas:
