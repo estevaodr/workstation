@@ -24,7 +24,7 @@
   community.general.homebrew_cask:
     name: "{{ item }}"
     update_homebrew: yes
-  ignore_errors: yes
+  ignore_errors: True
   when: "'{{ item }}' not in brew_casks.stdout"
   with_items:
     - google-drive
@@ -57,12 +57,16 @@
     # https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device
     - blackhole-2ch
     - evernote
+    - altserver
+    - openlens
+    - the-unarchiver
+
 
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
     name: "{{ item }}"
-  ignore_errors: yes
+  ignore_errors: True
   when: "'{{ item }}' not in brew_formula.stdout"
   with_items:
     - aws-iam-authenticator
@@ -92,6 +96,12 @@
     - mas
     - pre-commit
     - languagetool
+    - aws-iam-authenticator
+    - oci-cli
+    - minikube
+    - hyperkit
+    - gnupg
+    - sops
 
 
 - name: Install a list of apps from mac store
