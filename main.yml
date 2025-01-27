@@ -1,6 +1,6 @@
-- hosts: localhost
-  # become: true
-  gather_facts: yes
+- name: "Configure local workstation"
+  hosts: localhost
+  gather_facts: true
   roles:
     - role: packages
       tags: ['packages']
@@ -8,6 +8,3 @@
       tags: ['asdf']
     - role: zsh
       tags: ['zsh']
-
-
-

@@ -1,16 +1,19 @@
-- git:
+- name: "Clone ASDF repository"
+  ansible.builtin.git:
     repo: https://github.com/asdf-vm/asdf.git
     dest: "/Users/{{ lookup('env', 'USER') }}/.asdf"
     version: v0.11.3
+
 - name: "Create a default asdf configuration"
-  template:
+  ansible.builtin.template:
     src: templates/.asdfrc.j2
-    dest: /Users/{{ lookup('env', 'USER') }}/.asdfrc
+    dest: "/Users/{{ lookup('env', 'USER') }}/.asdfrc"
     owner: "{{ lookup('env', 'USER') }}"
-    force: yes
+    mode: '0644'
+    force: true
 
 - name: "Install asdf plugins"
-  shell: |
+  ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
     asdf plugin-add {{ item }} || exit 0
   with_items:
@@ -18,28 +21,40 @@
     - terraform
     - golang
     - kind
+    - nodejs
+  changed_when: false
 
 - name: "Install Default Terraform"
-  shell: |
+  ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
-    asdf install terraform 1.4.6
-    asdf global terraform 1.4.6
+    asdf install terraform 1.6.1
+    asdf global terraform 1.6.1
+  changed_when: false
 
 - name: "Install Default Terragrunt"
-  shell: |
+  ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
     asdf install terragrunt 0.45.0
     asdf global terragrunt 0.45.0
+  changed_when: false
 
 - name: "Install Default Golang"
-  shell: |
+  ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
     asdf install golang 1.20
-    asdf install golang 1.18.1
     asdf global golang 1.20
+  changed_when: false
 
 - name: "Install Default Kind"
-  shell: |
+  ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
     asdf install kind latest
     asdf global kind latest
+  changed_when: false
+
+- name: "Install Default Nodejs"
+  ansible.builtin.shell: |
+    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    asdf install nodejs 20.10.0
+    asdf global nodejs 20.10.0
+  changed_when: false

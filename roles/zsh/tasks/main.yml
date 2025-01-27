@@ -1,33 +1,37 @@
-- name: Install Oh My ZSH
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+- name: "Install Oh My ZSH"
+  ansible.builtin.shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   args:
     creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"
+  changed_when: false
 
-- name: Set ZSH as the default shell
-  shell: chsh -s $(which zsh) {{ lookup('env', 'USER') }}
-  become: True
+- name: "Set ZSH as the default shell"
+  ansible.builtin.shell: chsh -s $(which zsh) {{ lookup('env', 'USER') }}
+  become: true
+  changed_when: false
 
-- name: Fix permissions for zsh (if needed)
-  file:
-    name: "{{ item }}"
+- name: "Fix permissions for zsh"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
     mode: g-w,o-w
+  become: true
   loop:
     - /usr/local/share/zsh/site-functions
     - /usr/local/share/zsh
-    
-- name: Chnage ~/.zshrc
-  replace:
+  failed_when: false
+
+- name: "Change ~/.zshrc plugins"
+  ansible.builtin.replace:
     dest: ~/.zshrc
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
-    mode: u=rw,g=r,o=r
+    mode: "0644"
   loop:
     - regexp: '^plugins=.*'
       replace: plugins=(colored-man-pages dirhistory docker git history vagrant-prompt kubectl)
 
-
-- name: Add commands to ~/.zshrc
-  blockinfile:
+- name: "Add commands to ~/.zshrc"
+  ansible.builtin.blockinfile:
     dest: ~/.zshrc
     block: |
       #set history size
@@ -62,11 +66,29 @@
 
       # Always reply Yes and automatically upgrade oh-my-zsh
       DISABLE_UPDATE_PROMPT=true
-      
+
       # export ASDF
       . $HOME/.asdf/asdf.sh
       . $HOME/.asdf/completions/asdf.bash
       . $HOME/.asdf/plugins/golang/set-env.zsh
 
       export ASDF_GOLANG_MOD_VERSION_ENABLED="true"
-      
+
+      ## Custom Alias
+      alias python='python3'
+      alias dns_cleanup="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+      alias awslocal="aws --endpoint-url=http://localhost:4566"
+      alias assume_role='. /Users/estevaoribeiro/src/scalis/devops/devops-swiss-knife/assumeRole/main.sh'
+      alias k8s='. /Users/estevaoribeiro/src/scalis/devops/devops-swiss-knife/k8sctx/main.sh'
+      alias clean_dns="sudo dscacheutil -flushcache"
+      alias get_pr='. /Users/estevaoribeiro/src/scalis/devops/devops-swiss-knife/git/get_pr.sh'
+      alias get_unstaged="git --no-pager diff"
+      alias get_staged="git --no-pager diff --staged"
+      alias aws_dev="export AWS_PROFILE=scalis-development && export AWS_REGION=us-east-2"
+      alias aws_legacy="export AWS_PROFILE=scalis && export AWS_REGION=us-east-2"
+      alias aws_prod="export AWS_PROFILE=scalis-production && export AWS_REGION=us-east-2"
+      alias aws_stg="export AWS_PROFILE=scalis-staging && export AWS_REGION=us-east-2"
+      alias k8s_dev="export KUBECONFIG=~/.kube/development"
+      alias k8s_prod="export KUBECONFIG=~/.kube/production"
+      alias k8s_stg="export KUBECONFIG=~/.kube/staging"
+      eval $(thefuck --alias)

@@ -16,6 +16,8 @@ There's a simple shell script in bin/bootstrap.sh which will perform the initial
 The main playbook is built using the tag strategy, so you can use the tags inside the main playbook to execute parts of code separated like this example:
 
 ```shell
+ansible-galaxy collection install community.general
+ansible-galaxy install -r requirements.yml
 ansible-playbook -i "localhost" -c local -t packages  main.yml --ask-become-pass
 ```
 

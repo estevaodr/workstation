@@ -1,7 +1,10 @@
 ---
 repos:
-- repo: https://github.com/ansible/ansible-lint.git
-  rev: v4.2.0
-  hooks:
-    - id: ansible-lint
-      files: \.(yaml|yml)$
+  - repo: https://github.com/ansible/ansible-lint.git
+    rev: v6.22.1  # Using a newer version that's compatible with Python 3.13
+    hooks:
+      - id: ansible-lint
+        files: \.(yaml|yml)$
+        args:
+          - --skip-list
+          - yaml[new-line-at-end-of-file]

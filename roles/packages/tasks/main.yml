@@ -1,31 +1,31 @@
-- name: Install homebrew
-  include_role:
+- name: "Install homebrew"
+  ansible.builtin.include_role:
     name: geerlingguy.mac.homebrew
 
-- name: Make sure homebrew bin is in path
+- name: "Make sure homebrew bin is in path"
   ansible.builtin.lineinfile:
     path: /etc/paths
     state: present
     line: '/opt/homebrew/bin'
   become: true
   become_user: root
-  
-- name: Get a list of installed packages from brew cask
-  command: /usr/local/bin/brew list --casks
+
+- name: "Get installed cask packages"
+  ansible.builtin.command: /opt/homebrew/bin/brew list --casks
   register: brew_casks
   changed_when: false
 
-- name: Get a list of installed packages from brew formula
-  command: /usr/local/bin/brew list --formula
+- name: "Get installed formula packages"
+  ansible.builtin.command: /opt/homebrew/bin/brew list --formula
   register: brew_formula
-  changed_when: false         
+  changed_when: false
 
-- name: Install core packages via brew casks
+- name: "Install core packages via brew casks"
   community.general.homebrew_cask:
     name: "{{ item }}"
-    update_homebrew: yes
-  ignore_errors: True
-  when: "'{{ item }}' not in brew_casks.stdout"
+    update_homebrew: true
+  failed_when: false
+  when: "item not in brew_casks.stdout"
   with_items:
     - google-drive
     - docker
@@ -35,39 +35,28 @@
     - slack
     - sublime-text
     - telegram
-    - visual-studio-code
     - vlc
     - zoom
     - bitwarden
     - virtualbox
-    - clickup
     - notion
-    - google-cloud-sdk
-    - lens
+    - notion-calendar
     - stats
     - docker
     - spotify
     - whatsapp
-    - microsoft-teams
-    - microsoft-office
-    - balenaetcher
-    - audacity
-    - soundflower
-    # https://github.com/ExistentialAudio/BlackHole 
-    # https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device
-    - blackhole-2ch
-    - evernote
-    - altserver
-    - openlens
     - the-unarchiver
-
-
+    - keybase
+    - warp
+    - cursor
+    - pritunl
+    - dbeaver-community
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
     name: "{{ item }}"
-  ignore_errors: True
-  when: "'{{ item }}' not in brew_formula.stdout"
+  failed_when: false
+  when: "item not in brew_formula.stdout"
   with_items:
     - aws-iam-authenticator
     - awscli
@@ -96,27 +85,17 @@
     - mas
     - pre-commit
     - languagetool
-    - aws-iam-authenticator
     - oci-cli
-    - minikube
-    - hyperkit
     - gnupg
     - sops
+    - htop
+    - sops
 
-
-- name: Install a list of apps from mac store
+- name: "Install apps from mac store"
   community.general.mas:
     id:
-       - 472790630 # olive tree bible
-       - 497799835 # xcode
-       - 408981434 # imovie
+      - 472790630 # olive tree bible
+      - 497799835 # xcode
+      - 408981434 # imovie
+      - 6447783111 # Sider: Ask AI Chat Bot, Writer
     state: present
-
-
-- name: Upgrade all installed Mac App Store apps
-  community.general.mas:
-    upgrade_all: true
-
-
-
- 
