@@ -92,6 +92,7 @@
     - htop
     - sops
     - pulumi
+    - discord
 
 - name: "Install apps from mac store"
   community.general.mas:
