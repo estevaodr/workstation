@@ -51,6 +51,7 @@
     - cursor
     - pritunl
     - dbeaver-community
+    - chatgpt
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
@@ -98,4 +99,5 @@
       - 497799835 # xcode
       - 408981434 # imovie
       - 6447783111 # Sider: Ask AI Chat Bot, Writer
+      - 6714467650 # Perplexity
     state: present
