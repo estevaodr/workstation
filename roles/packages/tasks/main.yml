@@ -38,7 +38,6 @@
     - vlc
     - zoom
     - bitwarden
-    - virtualbox
     - notion
     - notion-calendar
     - stats
@@ -52,6 +51,7 @@
     - pritunl
     - dbeaver-community
     - chatgpt
+    - utm
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
@@ -93,6 +93,13 @@
     - sops
     - pulumi
     - discord
+
+- name: "Remove unwanted packages"
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - virtualbox
 
 - name: "Install apps from mac store"
   community.general.mas:
