@@ -91,6 +91,7 @@
     - sops
     - htop
     - sops
+    - pulumi
 
 - name: "Install apps from mac store"
   community.general.mas:

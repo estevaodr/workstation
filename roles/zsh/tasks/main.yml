@@ -91,4 +91,5 @@
       alias k8s_dev="export KUBECONFIG=~/.kube/development"
       alias k8s_prod="export KUBECONFIG=~/.kube/production"
       alias k8s_stg="export KUBECONFIG=~/.kube/staging"
+      alias k8s_lab="export KUBECONFIG=~/.kube/lab"
       eval $(thefuck --alias)

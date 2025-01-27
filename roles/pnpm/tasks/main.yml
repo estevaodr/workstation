@@ -1,0 +1,26 @@
+- name: "Install pnpm using npm"
+  ansible.builtin.shell: |
+    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    npm install -g pnpm
+  changed_when: false
+
+- name: "Configure pnpm"
+  ansible.builtin.shell: |
+    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    pnpm setup
+  changed_when: false
+
+- name: "Source pnpm environment"
+  ansible.builtin.shell: |
+    source /Users/{{ lookup('env', 'USER') }}/.zshrc
+  changed_when: false
+
+- name: "Install packages using pnpm"
+  ansible.builtin.shell: |
+    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    source /Users/{{ lookup('env', 'USER') }}/.zshrc
+    pnpm add -g {{ item }}
+  changed_when: false
+  with_items:
+    - cdktf-cli@0.20.11
+    - cdk@2.1.0

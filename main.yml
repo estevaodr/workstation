@@ -8,3 +8,5 @@
       tags: ['asdf']
     - role: zsh
       tags: ['zsh']
+    - role: pnpm
+      tags: ['pnpm']
