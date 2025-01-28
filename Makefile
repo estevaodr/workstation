@@ -12,4 +12,4 @@ requirements:
 	ansible-galaxy install -r requirements.yml
 
 $(tags):
-	ansible-playbook -i "localhost" -c local -t $@  main.yml --ask-become-pass
+	ansible-playbook -i "localhost" -c local -t $@ -vvv  main.yml --ask-become-pass

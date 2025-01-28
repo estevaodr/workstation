@@ -10,3 +10,5 @@
       tags: ['zsh']
     - role: pnpm
       tags: ['pnpm']
+    - role: krew
+      tags: ['krew']
