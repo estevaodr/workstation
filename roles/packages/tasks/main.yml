@@ -52,6 +52,7 @@
     - dbeaver-community
     - chatgpt
     - utm
+    - visual-studio-code
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
