@@ -24,6 +24,9 @@
   community.general.homebrew_cask:
     name: "{{ item }}"
     update_homebrew: true
+    accept_external_apps: true
+  become: true
+  become_user: "{{ lookup('env', 'USER') }}"
   failed_when: false
   when: "item not in brew_casks.stdout"
   with_items:
@@ -53,6 +56,8 @@
     - chatgpt
     - utm
     - visual-studio-code
+    - another-redis-desktop-manager
+    - postman
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
@@ -94,6 +99,9 @@
     - sops
     - pulumi
     - discord
+    - checkov
+    - terraform-docs
+    - tflint
 
 - name: "Remove unwanted packages"
   community.general.homebrew:

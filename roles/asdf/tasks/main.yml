@@ -36,7 +36,8 @@
   ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
     asdf install terragrunt 0.45.0
-    asdf global terragrunt 0.45.0
+    asdf install terragrunt 0.53.0
+    asdf global terragrunt 0.53.0
   changed_when: false
 
 - name: "Install Default Golang"
