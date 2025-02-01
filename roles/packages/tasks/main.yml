@@ -58,6 +58,8 @@
     - visual-studio-code
     - another-redis-desktop-manager
     - postman
+    - 1password
+    - thunderbird
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
