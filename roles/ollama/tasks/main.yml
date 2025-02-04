@@ -1,0 +1,39 @@
+- name: "Wait for Ollama service to be ready"
+  ansible.builtin.wait_for:
+    port: 11434
+    timeout: 30
+  failed_when: false
+
+- name: "Start Ollama service"
+  ansible.builtin.command: ollama server &
+  async: 45
+  poll: 0
+  when: not ansible_check_mode
+  changed_when: false
+
+- name: "Wait for Ollama API to be available"
+  ansible.builtin.uri:
+    url: http://127.0.0.1:11434/api/tags
+    method: GET
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 2
+  failed_when: false
+  ignore_errors: true
+
+- name: "Pull Ollama models"
+  ansible.builtin.command: "ollama pull {{ item }}"
+  with_items:
+    - deepseek-r1:1.5b
+    - deepseek-r1:32b
+    - deepseek-coder:6.7b
+  register: pull_result
+  changed_when: "'pulling manifest' in pull_result.stderr"
+
+- name: "Stop Ollama service"
+  ansible.builtin.command: ollama stop
+  async: 45
+  poll: 0
+  when: not ansible_check_mode
+  changed_when: false

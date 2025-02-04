@@ -104,6 +104,14 @@
     - checkov
     - terraform-docs
     - tflint
+    - ollama
+    - gh
+    - pkg-config
+    # Dependencies for pnpm canvas package
+    - cairo
+    - pango
+    - pixman
+
 
 - name: "Remove unwanted packages"
   community.general.homebrew:

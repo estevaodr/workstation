@@ -12,3 +12,5 @@
       tags: ['pnpm']
     - role: krew
       tags: ['krew']
+    - role: ollama
+      tags: ['ollama']
