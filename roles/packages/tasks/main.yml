@@ -111,6 +111,12 @@
     - cairo
     - pango
     - pixman
+    - dnsmasq
+    - libpng
+    - jpeg
+    - gitlib
+    - librsvg
+    - pixman
 
 
 - name: "Remove unwanted packages"
@@ -129,3 +135,36 @@
       - 6447783111 # Sider: Ask AI Chat Bot, Writer
       - 6714467650 # Perplexity
     state: present
+
+- name: "Install dnsmasq"
+  community.general.homebrew:
+    name: dnsmasq
+    state: present
+  when: "'dnsmasq' not in brew_formula.stdout"
+
+- name: "Create dnsmasq configuration"
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /usr/local/etc/dnsmasq.conf
+    mode: '0644'
+  become: true
+
+- name: "Start dnsmasq service"
+  ansible.builtin.command: brew services start dnsmasq
+  register: dnsmasq_service
+  changed_when: "'Successfully started' in dnsmasq_service.stdout"
+  failed_when: false
+
+- name: "Create resolver directory"
+  ansible.builtin.file:
+    path: /etc/resolver
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: "Configure resolver for scalis.loc"
+  ansible.builtin.template:
+    src: resolver.j2
+    dest: /etc/resolver/scalis.loc
+    mode: '0644'
+  become: true
