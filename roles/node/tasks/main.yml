@@ -1,8 +1,11 @@
-- name: "Install pnpm using npm"
+- name: "Install global npm packages"
   ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
-    npm install -g pnpm
+    npm install -g {{ item }}
   changed_when: false
+  with_items:
+    - pnpm
+    - yarn
 
 - name: "Configure pnpm"
   ansible.builtin.shell: |

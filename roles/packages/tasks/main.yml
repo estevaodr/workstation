@@ -60,6 +60,9 @@
     - postman
     - 1password
     - thunderbird
+    - libpq
+    - redis-insight
+    - microsoft-remote-desktop
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
@@ -117,6 +120,12 @@
     - gitlib
     - librsvg
     - pixman
+    - 1password-cli
+    - krr
+    - watch
+    - k6
+    - kustomize
+    - act
 
 
 - name: "Remove unwanted packages"

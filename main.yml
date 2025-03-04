@@ -8,8 +8,8 @@
       tags: ['asdf']
     - role: zsh
       tags: ['zsh']
-    - role: pnpm
-      tags: ['pnpm']
+    - role: node
+      tags: ['node']
     - role: krew
       tags: ['krew']
     - role: ollama

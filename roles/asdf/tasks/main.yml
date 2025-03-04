@@ -22,6 +22,7 @@
     - golang
     - kind
     - nodejs
+    - python
   changed_when: false
 
 - name: "Install Default Terraform"
@@ -43,8 +44,11 @@
 - name: "Install Default Golang"
   ansible.builtin.shell: |
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
-    asdf install golang 1.20
-    asdf global golang 1.20
+    asdf install golang 1.20.0
+    asdf install golang 1.22.0
+    asdf install golang 1.24.0
+    asdf global golang 1.24.0
+
   changed_when: false
 
 - name: "Install Default Kind"
@@ -59,5 +63,6 @@
     source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
     asdf install nodejs 20.10.0
     asdf install nodejs 20.18.0
+    asdf install nodejs 20.12.2
     asdf global nodejs 20.18.0
   changed_when: false

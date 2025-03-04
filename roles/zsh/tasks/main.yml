@@ -1,7 +1,6 @@
 - name: "Get home directory"
   ansible.builtin.set_fact:
     home_dir: "{{ lookup('env', 'HOME') }}"
-
 - name: "Install Oh My ZSH"
   ansible.builtin.shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   args:
@@ -15,7 +14,6 @@
   register: shell_change
   failed_when: false
   changed_when: shell_change.changed
-
 - name: "Fix permissions for zsh"
   ansible.builtin.file:
     path: "{{ item }}"
@@ -26,7 +24,6 @@
     - /usr/local/share/zsh/site-functions
     - /usr/local/share/zsh
   failed_when: false
-
 - name: "Change ~/.zshrc plugins"
   ansible.builtin.replace:
     dest: ~/.zshrc
@@ -36,7 +33,6 @@
   loop:
     - regexp: '^plugins=.*'
       replace: plugins=(colored-man-pages dirhistory docker git history vagrant-prompt kubectl)
-
 - name: "Add commands to ~/.zshrc"
   ansible.builtin.blockinfile:
     dest: ~/.zshrc
@@ -59,36 +55,28 @@
       export HOMEBREW_CLEANUP_MAX_AGE_DAYS=7
       # Fail on the failure of installation from a bottle rather than falling back to building from source
       export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
-
       alias dos2unix="sed -i 's/\r$//' "
       alias unix2dos="awk 'sub(\"$\",\"\r\")' "
       alias md5sum_dir="rhash --md5 --recursive --percents --output=md5sum.md5 ."
       alias k=kubectl
       # This command is used a LOT both below and in daily life
       alias k=kubectl
-
       # Execute a kubectl command against all namespaces
       alias kca='f(){ kubectl "$@" --all-namespaces;  unset -f f; }; f'
-
       # Apply a YML file
       alias kaf='kubectl apply -f'
-
       # Drop into an interactive terminal on a container
       alias keti='kubectl exec -ti'
-
       # Manage configuration quickly to switch contexts between local, dev ad staging.
       alias kcuc='kubectl config use-context'
       alias kcsc='kubectl config set-context'
       alias kcdc='kubectl config delete-context'
       alias kccc='kubectl config current-context'
-
       # List all contexts
       alias kcgc='kubectl config get-contexts'
-
       # General aliases
       alias kdel='kubectl delete'
       alias kdelf='kubectl delete -f'
-
       # Pod management.
       alias kgp='kubectl get pods'
       alias k="kubectl "
@@ -107,10 +95,8 @@
       alias kep='kubectl edit pods'
       alias kdp='kubectl describe pods'
       alias kdelp='kubectl delete pods'
-
       # get pod by label: kgpl "app=myapp" -n myns
       alias kgpl='kgp -l'
-
       # Service management.
       alias kgs='kubectl get svc'
       alias ks="kubectl get svc "
@@ -119,31 +105,26 @@
       alias kes='kubectl edit svc'
       alias kds='kubectl describe svc'
       alias kdels='kubectl delete svc'
-
       # Ingress management
       alias kgi='kubectl get ingress'
       alias kei='kubectl edit ingress'
       alias kdi='kubectl describe ingress'
       alias kdeli='kubectl delete ingress'
-
       # Namespace management
       alias kgns='kubectl get namespaces'
       alias kens='kubectl edit namespace'
       alias kdns='kubectl describe namespace'
       alias kdelns='kubectl delete namespace'
       alias kcn='kubectl config set-context $(kubectl config current-context) --namespace'
-
       # ConfigMap management
       alias kgcm='kubectl get configmaps'
       alias kecm='kubectl edit configmap'
       alias kdcm='kubectl describe configmap'
       alias kdelcm='kubectl delete configmap'
-
       # Secret management
       alias kgsec='kubectl get secret'
       alias kdsec='kubectl describe secret'
       alias kdelsec='kubectl delete secret'
-
       # Deployment management.
       alias kgd='kubectl get deployment'
       alias kgdw='kgd --watch'
@@ -156,53 +137,41 @@
       kres(){
           kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
       }
-
       # Rollout management.
       alias kgrs='kubectl get rs'
       alias krh='kubectl rollout history'
       alias kru='kubectl rollout undo'
-
       # Port forwarding
       alias kpf="kubectl port-forward"
-
       # Tools for accessing all information
       alias kga='kubectl get all'
       alias kgaa='kubectl get all --all-namespaces'
-
       # Logs
       alias kl='kubectl logs'
       alias klf='kubectl logs -f'
-
       # File copy
       alias kcp='kubectl cp'
-
       # Node Management
       alias kgno='kubectl get nodes'
       alias keno='kubectl edit node'
       alias kdno='kubectl describe node'
       alias kdelno='kubectl delete node'
-
       # Helm Management
       alias hi="helm install "
       alias hu="helm uninstall "
       alias hl="helm list "
       alias hs="helm status "
       trash() { mv -fv "$@" ~/.Trash/ ; }
-
       DISABLE_AUTO_UPDATE="true"
       COMPLETION_WAITING_DOTS="true"
       HIST_STAMPS="yyyy-mm-dd"
-
       # Always reply Yes and automatically upgrade oh-my-zsh
       DISABLE_UPDATE_PROMPT=true
-
       # export ASDF
       . $HOME/.asdf/asdf.sh
       . $HOME/.asdf/completions/asdf.bash
       . $HOME/.asdf/plugins/golang/set-env.zsh
-
       export ASDF_GOLANG_MOD_VERSION_ENABLED="true"
-
       ## Custom Alias
       alias python='python3'
       alias dns_cleanup="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
@@ -222,3 +191,4 @@
       alias k8s_stg="export KUBECONFIG={{ home_dir }}/.kube/staging"
       alias k8s_lab="export KUBECONFIG={{ home_dir }}/.kube/lab"
       eval $(thefuck --alias)
+      export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
