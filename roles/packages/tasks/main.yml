@@ -63,6 +63,7 @@
     - libpq
     - redis-insight
     - microsoft-remote-desktop
+    - pgadmin4
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
@@ -126,6 +127,8 @@
     - k6
     - kustomize
     - act
+    - libpq
+    - minikube
 
 
 - name: "Remove unwanted packages"
