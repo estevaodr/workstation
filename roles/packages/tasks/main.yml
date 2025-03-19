@@ -64,6 +64,7 @@
     - redis-insight
     - microsoft-remote-desktop
     - pgadmin4
+    - microsoft-teams
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
