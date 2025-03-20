@@ -65,6 +65,7 @@
     - microsoft-remote-desktop
     - pgadmin4
     - microsoft-teams
+    - drawio
 
 - name: "Install formula packages via brew"
   community.general.homebrew:
