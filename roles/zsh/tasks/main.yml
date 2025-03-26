@@ -58,6 +58,7 @@
       alias dos2unix="sed -i 's/\r$//' "
       alias unix2dos="awk 'sub(\"$\",\"\r\")' "
       alias md5sum_dir="rhash --md5 --recursive --percents --output=md5sum.md5 ."
+      alias chrome="open -a 'Google Chrome'"
       alias k=kubectl
       # This command is used a LOT both below and in daily life
       alias k=kubectl
