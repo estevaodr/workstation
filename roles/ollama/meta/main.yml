@@ -1,2 +1,5 @@
 dependencies:
-  - { role: packages }
+  - role: brew
+    when: ansible_os_family == 'Darwin'
+  - role: apt
+    when: ansible_os_family == 'Debian'	

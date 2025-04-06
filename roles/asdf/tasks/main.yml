@@ -1,20 +1,53 @@
+- name: Set OS specific variables
+  ansible.builtin.set_fact:
+    asdf_path: "{{ '/Users/' if ansible_os_family == 'Darwin' else '/home/' }}{{ lookup('env', 'USER') }}/.asdf"
+    home_path: "{{ '/Users/' if ansible_os_family == 'Darwin' else '/home/' }}{{ lookup('env', 'USER') }}"
+
 - name: "Clone ASDF repository"
   ansible.builtin.git:
     repo: https://github.com/asdf-vm/asdf.git
-    dest: "/Users/{{ lookup('env', 'USER') }}/.asdf"
+    dest: "{{ asdf_path }}"
     version: v0.11.3
+
+- name: "Check if ASDF is already configured in .zshrc"
+  ansible.builtin.shell: grep -q "asdf.sh" {{ home_path }}/.zshrc || echo "not found"
+  register: asdf_in_zshrc
+  changed_when: false
+  failed_when: false
+
+- name: "Add ASDF to .zshrc"
+  ansible.builtin.blockinfile:
+    path: "{{ home_path }}/.zshrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - ASDF"
+    block: |
+      # export ASDF
+      . $HOME/.asdf/asdf.sh
+      . $HOME/.asdf/completions/asdf.bash
+  when: asdf_in_zshrc.stdout == "not found"
+
+- name: "Source .zshrc to update current environment"
+  ansible.builtin.shell: |
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+  args:
+    executable: /bin/zsh
+  changed_when: false
 
 - name: "Create a default asdf configuration"
   ansible.builtin.template:
     src: templates/.asdfrc.j2
-    dest: "/Users/{{ lookup('env', 'USER') }}/.asdfrc"
+    dest: "{{ home_path }}/.asdfrc"
     owner: "{{ lookup('env', 'USER') }}"
     mode: '0644'
     force: true
 
 - name: "Install asdf plugins"
   ansible.builtin.shell: |
-    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
     asdf plugin-add {{ item }} || exit 0
   with_items:
     - terragrunt
@@ -23,46 +56,88 @@
     - kind
     - nodejs
     - python
+    - terramate
+  args:
+    executable: /bin/zsh
   changed_when: false
 
 - name: "Install Default Terraform"
   ansible.builtin.shell: |
-    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
     asdf install terraform 1.6.1
     asdf install terraform 1.10.5
     asdf global terraform 1.6.1
+  args:
+    executable: /bin/zsh
   changed_when: false
 
 - name: "Install Default Terragrunt"
   ansible.builtin.shell: |
-    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
     asdf install terragrunt 0.45.0
     asdf install terragrunt 0.53.0
     asdf global terragrunt 0.53.0
+  args:
+    executable: /bin/zsh
   changed_when: false
 
 - name: "Install Default Golang"
   ansible.builtin.shell: |
-    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
     asdf install golang 1.20.0
     asdf install golang 1.22.0
     asdf install golang 1.24.0
     asdf global golang 1.24.0
-
+  args:
+    executable: /bin/zsh
   changed_when: false
 
 - name: "Install Default Kind"
   ansible.builtin.shell: |
-    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
     asdf install kind latest
     asdf global kind latest
+  args:
+    executable: /bin/zsh
   changed_when: false
 
 - name: "Install Default Nodejs"
   ansible.builtin.shell: |
-    source /Users/{{ lookup('env', 'USER') }}/.asdf/asdf.sh
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
     asdf install nodejs 20.10.0
     asdf install nodejs 20.18.0
     asdf install nodejs 20.12.2
     asdf global nodejs 20.18.0
+  args:
+    executable: /bin/zsh
   changed_when: false
+
+- name: "Install Terramate"
+  ansible.builtin.shell: |
+    if [ -f {{ home_path }}/.zshrc ]; then
+      source {{ home_path }}/.zshrc || true
+    fi
+    source {{ asdf_path }}/asdf.sh
+    asdf install terramate latest
+    asdf global terramate latest
+  args:
+    executable: /bin/zsh
+  changed_when: false
+
+
+

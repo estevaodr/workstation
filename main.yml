@@ -1,16 +1,35 @@
-- name: "Configure local workstation"
+- name: "Configure MacOS"
   hosts: localhost
   gather_facts: true
+  become: true
   roles:
-    - role: packages
-      tags: ['packages']
+    - role: brew
+      tags: ['brew']
+      when: ansible_os_family == 'Darwin'
     - role: asdf
       tags: ['asdf']
+      when: ansible_os_family == 'Darwin'
     - role: zsh
       tags: ['zsh']
+      when: ansible_os_family == 'Darwin'
     - role: node
       tags: ['node']
+      when: ansible_os_family == 'Darwin'
     - role: krew
       tags: ['krew']
+      when: ansible_os_family == 'Darwin'
     - role: ollama
       tags: ['ollama']
+      when: ansible_os_family == 'Darwin'
+
+- name: "Configure Ubuntu"
+  hosts: localhost
+  gather_facts: true
+  become: true
+  roles:
+    - role: apt
+      tags: ['apt']
+      when: ansible_os_family == 'Debian'
+    - role: asdf
+      tags: ['asdf']
+      when: ansible_os_family == 'Debian'
